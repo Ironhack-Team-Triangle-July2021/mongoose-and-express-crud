@@ -1,0 +1,13 @@
+<h1>Books List: </h1>
+
+{{#each books}}
+    <section class="book">
+        Title: {{this.title}} <br />
+        Author: {{this.author}} <br />
+        Rating: {{this.rating}} <br /><br />
+
+        <a href="/books/{{this._id}}">Details</a>
+    </section>
+{{/each}}
+
+
