@@ -78,4 +78,17 @@ router.post('/books/:bookId/edit', (req, res, next) => {
 });
 
 
+router.post('/books/:bookId/delete', (req, res, next) => {
+    const {bookId} = req.params;
+    Book.findByIdAndDelete(bookId)
+        .then( () => {
+            res.redirect("/books");
+        })
+        .catch( error => {
+            console.log('Error updating book: ', error);
+            next(error);
+        });
+});
+
+
 module.exports = router;
