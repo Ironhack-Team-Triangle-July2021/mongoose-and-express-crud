@@ -11,6 +11,11 @@ h1 {
   color: 15px;
 }
 
+input, textarea {
+  display: block;
+  margin: 1rem 0;
+}
+
 .book {
   border: 1px solid #aaa;
   padding: 1rem;
