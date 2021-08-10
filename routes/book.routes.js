@@ -1,6 +1,7 @@
 const router = require("express").Router();
 
 const Book = require("../models/Book.model");
+const fileUploader = require('../config/cloudinary.config');
 
 
 router.get('/books', (req, res, next) => {
@@ -21,9 +22,11 @@ router.get('/books/create', (req, res, next) => {
 });
 
 
-router.post('/books/create', (req, res, next) => {
+router.post('/books/create', fileUploader.single('book-cover-image'), (req, res, next) => {
     const { title, author, description, rating } = req.body;
-    Book.create( { title, author, description, rating } )
+    const imageUrl = req.file.path;
+
+    Book.create( { title, author, description, rating, imageUrl } )
         .then( bookFromDB => {
             console.log(`New book created: ${bookFromDB.title}.`);
             res.redirect('/books');
@@ -63,11 +66,23 @@ router.get('/books/:bookId/edit', (req, res, next) => {
 });
 
 
-router.post('/books/:bookId/edit', (req, res, next) => {
+router.post('/books/:bookId/edit', fileUploader.single('book-cover-image'), (req, res, next) => {
     const {bookId} = req.params;
     const { title, description, author, rating } = req.body;
     
-    Book.findByIdAndUpdate(bookId, { title, description, author, rating }, {new: true} )
+    const bookData = { 
+        title, 
+        description, 
+        author, 
+        rating
+    };
+
+    // add imageUrl property (only if user provides image)
+    if(req.file.path){
+        bookData.imageUrl = req.file.path;
+    }
+
+    Book.findByIdAndUpdate(bookId, bookData, {new: true} )
         .then( updatedBook => {
             res.redirect(`/books/${updatedBook.id}`);
         })

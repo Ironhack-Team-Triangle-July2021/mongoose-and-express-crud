@@ -11,6 +11,11 @@
     <p>
         <strong>Rating:</strong> {{book.rating}} <br />
     </p>
+
+    {{#if book.imageUrl}}
+        <img src="{{book.imageUrl}}" alt="{{book.title}}" />
+    {{/if}}
+
 </section>
 
 <br /><hr /><br />
